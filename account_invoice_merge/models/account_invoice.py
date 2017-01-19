@@ -4,6 +4,7 @@
 # © 2016 Pedro M. Baeza <pedro.baeza@serviciosbaeza.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from collections import OrderedDict
 from openerp import models, api
 from openerp import workflow
 from openerp.osv.orm import browse_record, browse_null
@@ -147,7 +148,8 @@ class AccountInvoice(models.Model):
             for invoice_line in account_invoice.invoice_line:
                 line_key = make_key(
                     invoice_line, self._get_invoice_line_key_cols())
-                o_line = invoice_infos['invoice_line'].setdefault(line_key, {})
+                o_line = invoice_infos['invoice_line'].setdefault(
+                    line_key, OrderedDict())
                 if o_line:
                     self._merge_invoice_line_values(o_line, invoice_line)
                 else:
