@@ -5,4 +5,11 @@ from openerp import api, SUPERUSER_ID
 
 
 def post_init_hook(cr, pool):
-    pass
+    env = api.Environment(cr, SUPERUSER_ID, {})
+    for line in env['account.invoice.line'].search([]):
+        line.write({
+            'move_line_ids': [
+                (4, move_line.id)
+                for move_line in line._find_move_line()
+            ],
+        })
